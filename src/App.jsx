@@ -19,7 +19,8 @@ function App() {
 			<BrowserRouter>
 				<Navbar horizontalLogo={horizontalLogo} mobileLogo={mobileLogo} title={"Informes de Comisario"}>
 					<NavLink label="Inicio" route="/" />
-					<NavLink label="bout" route="/bout" />
+					<NavLink label="Acerca de" route="/bout" />
+					<NavLink label="Ayuda" route="/help" />
 				</Navbar>
 				<Routes>
 					<Route path="/" element={<Home />} />

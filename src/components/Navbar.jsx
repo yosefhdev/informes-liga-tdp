@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-export default function Navbar({ children, className }) {
+export default function Navbar({
+    children, className, horizontalLogo, mobileLogo, title
+}) {
     const [isOpen, setIsOpen] = useState(false)
 
     // Mock authentication state - replace with your actual auth logic
@@ -22,30 +24,51 @@ export default function Navbar({ children, className }) {
     // Mock login/logout functions - replace with your actual auth functions
     const handleLogin = () => {
         setUser({
-            name: "John Doe",
-            email: "john@example.com",
+            name: "J. Nicolas",
+            email: "nicolastejeda@hotmail.com",
         })
     }
 
     const handleLogout = () => {
         setUser(null)
     }
+
+    // Default logos if not provided
+    const defaultHorizontalLogo = <span className="text-xl font-bold text-primary">YourLogo</span>
+
+    const defaultMobileLogo = <span className="text-xl font-bold text-primary">YL</span>
+
     return (
         <nav className={cn("bg-background border-b", className)}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between h-16">
-                    {/* Logo Section */}
+            <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+                <div className="relative flex items-center justify-between h-16">
+                    {/* Logo and Title Section - Responsive */}
                     <div className="flex items-center">
-                        <div className="flex-shrink-0 flex items-center">
-                            <span className="text-xl font-bold text-primary">YourLogo</span>
+                        {/* Desktop Logo and Title */}
+                        <div className="hidden md:flex md:items-center">
+                            <div className="flex-shrink-0">{horizontalLogo || defaultHorizontalLogo}</div>
+                            <h1 className="ml-2 text-base sm:text-lg md:text-xl lg:text-2xl font-semibold max-w-[120px] sm:max-w-[160px] md:max-w-[200px] lg:max-w-xs">
+                                {title}
+                            </h1>
                         </div>
-                        <div className="hidden md:ml-6 md:block">
-                            <div className="flex items-center space-x-4">{children}</div>
+
+                        {/* Mobile Logo and Title */}
+                        <div className="flex md:hidden items-center">
+                            <div className="flex-shrink-0">{mobileLogo || defaultMobileLogo}</div>
+                            <h1 className="ml-2 text-sm sm:text-base font-semibold max-w-[100px] sm:max-w-[140px]">
+                                {title}
+                            </h1>
                         </div>
                     </div>
 
-                    {/* Auth Section */}
+                    {/* Navigation Links - Right aligned and responsive */}
+                    <div className="hidden md:flex md:items-center md:justify-end flex-1 px-2 lg:px-4">
+                        <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4">{children}</div>
+                    </div>
+
+                    {/* Auth Section - Always visible */}
                     <div className="flex items-center">
+                        {/* Desktop Auth */}
                         <div className="hidden md:block">
                             {user ? (
                                 <DropdownMenu>
@@ -54,8 +77,10 @@ export default function Navbar({ children, className }) {
                                             variant="ghost"
                                             className="flex items-center h-8 px-2 py-1 rounded-md hover:bg-accent transition-colors"
                                         >
+                                            <span className="mr-2 text-sm font-medium truncate max-w-[80px] lg:max-w-[120px]">
+                                                {user.name}
+                                            </span>
                                             <ChevronDown className="h-4 w-4 opacity-50" />
-                                            <span className="mr-2 text-sm font-medium">{user.name}</span>
                                             <Avatar className="h-8 w-8 ml-1">
                                                 <AvatarImage src={user.avatarUrl} alt={user.name} />
                                                 <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
@@ -76,7 +101,7 @@ export default function Navbar({ children, className }) {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             ) : (
-                                <Button onClick={handleLogin} size="sm">
+                                <Button onClick={handleLogin} size="sm" className="whitespace-nowrap">
                                     <LogIn className="mr-2 h-4 w-4" />
                                     Iniciar sesión
                                 </Button>
@@ -84,7 +109,7 @@ export default function Navbar({ children, className }) {
                         </div>
 
                         {/* Mobile menu button */}
-                        <div className="md:hidden flex items-center ml-4">
+                        <div className="flex md:hidden ml-2">
                             <button
                                 onClick={() => setIsOpen(!isOpen)}
                                 className="inline-flex items-center justify-center p-2 rounded-md text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary transition-colors duration-200"
@@ -114,23 +139,23 @@ export default function Navbar({ children, className }) {
                     {/* Mobile auth section */}
                     <div className="pt-4 pb-3 border-t border-muted">
                         {user ? (
-                            <div className="flex items-center px-5">
+                            <div className="flex items-center px-3 sm:px-5">
                                 <div className="flex-shrink-0">
                                     <Avatar className="h-10 w-10">
                                         <AvatarImage src={user.avatarUrl} alt={user.name} />
                                         <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                 </div>
-                                <div className="ml-3">
-                                    <div className="text-base font-medium">{user.name}</div>
-                                    <div className="text-sm text-muted-foreground">{user.email}</div>
+                                <div className="ml-3 overflow-hidden">
+                                    <div className="text-base font-medium truncate">{user.name}</div>
+                                    <div className="text-sm text-muted-foreground truncate">{user.email}</div>
                                 </div>
                                 <Button variant="ghost" size="icon" className="ml-auto" onClick={handleLogout}>
                                     <LogOut className="h-5 w-5" />
                                 </Button>
                             </div>
                         ) : (
-                            <div className="px-5">
+                            <div className="px-3 sm:px-5">
                                 <Button onClick={handleLogin} className="w-full">
                                     <LogIn className="mr-2 h-4 w-4" />
                                     Iniciar sesión
@@ -143,4 +168,3 @@ export default function Navbar({ children, className }) {
         </nav>
     )
 }
-

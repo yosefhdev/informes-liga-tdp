@@ -30,7 +30,7 @@ bun install
 Para iniciar el servidor de desarrollo, usa:
 
 ```sh
-bun run dev
+bun dev
 ```
 
 Esto ejecutará el servidor en <http://localhost:5173/> (o el puerto que Vite asigne).

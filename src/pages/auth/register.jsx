@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
+import PageTransition from "@/components/AnimatedPage"
 
 export default function RegistroPage() {
     const [isLoading, setIsLoading] = useState(false)
@@ -85,110 +86,112 @@ export default function RegistroPage() {
     }
 
     return (
-        <div className="container flex flex-col items-center justify-center py-10">
-            <Card className="w-full max-w-md">
-                <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-bold text-center">Crear una cuenta</CardTitle>
-                    <CardDescription className="text-center">Ingresa tus datos para registrarte en la plataforma</CardDescription>
-                </CardHeader>
-                <form onSubmit={handleSubmit}>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="nombre">Nombre completo</Label>
-                            <Input
-                                id="nombre"
-                                name="nombre"
-                                placeholder="Tu nombre"
-                                value={formData.nombre}
-                                onChange={handleChange}
-                            />
-                            {errors.nombre && <p className="text-sm text-destructive">{errors.nombre}</p>}
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Correo electrónico</Label>
-                            <Input
-                                id="email"
-                                name="email"
-                                type="email"
-                                placeholder="ejemplo@correo.com"
-                                value={formData.email}
-                                onChange={handleChange}
-                            />
-                            {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Contraseña</Label>
-                            <div className="relative">
+        <PageTransition>
+            <div className="container flex flex-col items-center justify-center py-10">
+                <Card className="w-full max-w-md">
+                    <CardHeader className="space-y-1">
+                        <CardTitle className="text-2xl font-bold text-center">Crear una cuenta</CardTitle>
+                        <CardDescription className="text-center">Ingresa tus datos para registrarte en la plataforma</CardDescription>
+                    </CardHeader>
+                    <form onSubmit={handleSubmit}>
+                        <CardContent className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="nombre">Nombre completo</Label>
                                 <Input
-                                    id="password"
-                                    name="password"
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="••••••••"
-                                    value={formData.password}
+                                    id="nombre"
+                                    name="nombre"
+                                    placeholder="Tu nombre"
+                                    value={formData.nombre}
                                     onChange={handleChange}
                                 />
-                                <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="icon"
-                                    className="absolute right-0 top-0 h-full px-3"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                >
-                                    {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
-                                    <span className="sr-only">{showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}</span>
-                                </Button>
+                                {errors.nombre && <p className="text-sm text-destructive">{errors.nombre}</p>}
                             </div>
-                            {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
-                            <Input
-                                id="confirmPassword"
-                                name="confirmPassword"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="••••••••"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                            />
-                            {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <Checkbox
-                                id="terminos"
-                                checked={aceptaTerminos}
-                                onCheckedChange={(checked) => setAceptaTerminos(checked)}
-                            />
-                            <label
-                                htmlFor="terminos"
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                            >
-                                Acepto los{" "}
-                                <Link to="/terms" className="text-primary hover:underline">
-                                    términos y condiciones
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Correo electrónico</Label>
+                                <Input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    placeholder="ejemplo@correo.com"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                />
+                                {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="password">Contraseña</Label>
+                                <div className="relative">
+                                    <Input
+                                        id="password"
+                                        name="password"
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="••••••••"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
+                                        className="absolute right-0 top-0 h-full px-3"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        {showPassword ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
+                                        <span className="sr-only">{showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}</span>
+                                    </Button>
+                                </div>
+                                {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="confirmPassword">Confirmar contraseña</Label>
+                                <Input
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="••••••••"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                />
+                                {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword}</p>}
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Checkbox
+                                    id="terminos"
+                                    checked={aceptaTerminos}
+                                    onCheckedChange={(checked) => setAceptaTerminos(checked)}
+                                />
+                                <label
+                                    htmlFor="terminos"
+                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                    Acepto los{" "}
+                                    <Link to="/terms" className="text-primary hover:underline">
+                                        términos y condiciones
+                                    </Link>
+                                </label>
+                            </div>
+                            {errors.terminos && <p className="text-sm text-destructive">{errors.terminos}</p>}
+                        </CardContent>
+                        <CardFooter className="flex flex-col space-y-4">
+                            <Button className="w-full mt-4" type="submit" disabled={isLoading}>
+                                {isLoading ? "Registrando..." : "Registrarse"}
+                            </Button>
+                            <div className="flex justify-between w-full">
+                                <Link to="/" className="text-sm text-muted-foreground hover:text-primary">
+                                    ← Volver
                                 </Link>
-                            </label>
-                        </div>
-                        {errors.terminos && <p className="text-sm text-destructive">{errors.terminos}</p>}
-                    </CardContent>
-                    <CardFooter className="flex flex-col space-y-4">
-                        <Button className="w-full" type="submit" disabled={isLoading}>
-                            {isLoading ? "Registrando..." : "Registrarse"}
-                        </Button>
-                        <div className="flex justify-between w-full">
-                            <Link to="/" className="text-sm text-muted-foreground hover:text-primary">
-                                ← Volver
-                            </Link>
-                            <p className="text-sm text-muted-foreground">
-                                ¿Ya tienes una cuenta?{" "}
-                                <Link to="/login" className="text-primary hover:underline">
-                                    Inicia sesión
-                                </Link>
-                            </p>
-                        </div>
-                    </CardFooter>
-                </form>
-            </Card>
-        </div>
+                                <p className="text-sm text-muted-foreground">
+                                    ¿Ya tienes una cuenta?{" "}
+                                    <Link to="/login" className="text-primary hover:underline">
+                                        Inicia sesión
+                                    </Link>
+                                </p>
+                            </div>
+                        </CardFooter>
+                    </form>
+                </Card>
+            </div>
+        </PageTransition>
     )
 }
 

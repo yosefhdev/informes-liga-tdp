@@ -1,7 +1,5 @@
 
-import { useState } from "react"
-import { Menu, X, User, LogIn, LogOut, ChevronDown } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -11,32 +9,15 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { cn } from "@/lib/utils"
+import { ChevronDown, LogIn, LogOut, Menu, User, X } from "lucide-react"
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import { useAuth } from "@/components/auth/AuthContext"
 
-export default function Navbar({
-    children, className, horizontalLogo, mobileLogo, title
-}) {
+export default function Navbar({ children, className, horizontalLogo, mobileLogo, title }) {
     const [isOpen, setIsOpen] = useState(false)
-
-    // Mock authentication state - replace with your actual auth logic
-    const [user, setUser] = useState(null)
-
-    // Mock login/logout functions - replace with your actual auth functions
-    const handleLogin = () => {
-        setUser({
-            name: "J. Nicolas",
-            email: "nicolastejeda@hotmail.com",
-        })
-    }
-
-    const handleLogout = () => {
-        setUser(null)
-    }
-
-    // Default logos if not provided
-    const defaultHorizontalLogo = <span className="text-xl font-bold text-primary">YourLogo</span>
-
-    const defaultMobileLogo = <span className="text-xl font-bold text-primary">YL</span>
+    const { user } = useAuth()
 
     return (
         <nav className={cn("bg-background border-b", className)}>
@@ -46,7 +27,10 @@ export default function Navbar({
                     <div className="flex items-center">
                         {/* Desktop Logo and Title */}
                         <div className="hidden md:flex md:items-center">
-                            <div className="flex-shrink-0">{horizontalLogo || defaultHorizontalLogo}</div>
+                            <div className="flex-shrink-0">
+                                {horizontalLogo ||
+                                    <span className="text-xl font-bold text-primary">YourLogo</span>}
+                            </div>
                             <h1 className="ml-2 text-base sm:text-lg md:text-xl lg:text-2xl font-semibold max-w-[120px] sm:max-w-[160px] md:max-w-[200px] lg:max-w-xs">
                                 {title}
                             </h1>
@@ -54,7 +38,10 @@ export default function Navbar({
 
                         {/* Mobile Logo and Title */}
                         <div className="flex md:hidden items-center">
-                            <div className="flex-shrink-0">{mobileLogo || defaultMobileLogo}</div>
+                            <div className="flex-shrink-0">
+                                {mobileLogo ||
+                                    <span className="text-xl font-bold text-primary">YL</span>}
+                            </div>
                             <h1 className="ml-2 text-sm sm:text-base font-semibold max-w-[100px] sm:max-w-[140px]">
                                 {title}
                             </h1>
@@ -94,17 +81,19 @@ export default function Navbar({
                                             <User className="mr-2 h-4 w-4" />
                                             <span>Perfil</span>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={handleLogout}>
+                                        <DropdownMenuItem>
                                             <LogOut className="mr-2 h-4 w-4" />
                                             <span>Cerrar sesión</span>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             ) : (
-                                <Button onClick={handleLogin} size="sm" className="whitespace-nowrap">
-                                    <LogIn className="mr-2 h-4 w-4" />
-                                    Iniciar sesión
-                                </Button>
+                                <Link to="/login" >
+                                    <Button size="sm" className="whitespace-nowrap">
+                                        <LogIn className="mr-2 h-4 w-4" />
+                                        Iniciar sesión
+                                    </Button>
+                                </Link>
                             )}
                         </div>
 
@@ -150,17 +139,17 @@ export default function Navbar({
                                     <div className="text-base font-medium truncate">{user.name}</div>
                                     <div className="text-sm text-muted-foreground truncate">{user.email}</div>
                                 </div>
-                                <Button variant="ghost" size="icon" className="ml-auto" onClick={handleLogout}>
+                                <Button variant="ghost" size="icon" className="ml-auto" onClick={() => { }}>
                                     <LogOut className="h-5 w-5" />
                                 </Button>
                             </div>
                         ) : (
-                            <div className="px-3 sm:px-5">
-                                <Button onClick={handleLogin} className="w-full">
+                            <Link to={'/login'} className="px-3 sm:px-5">
+                                <Button className="w-full">
                                     <LogIn className="mr-2 h-4 w-4" />
                                     Iniciar sesión
                                 </Button>
-                            </div>
+                            </Link>
                         )}
                     </div>
                 </div>

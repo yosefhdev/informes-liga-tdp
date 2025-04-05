@@ -124,7 +124,7 @@ export default function RegistroPage() {
 
     return (
         <PageTransition>
-            <div className="container flex flex-col items-center justify-center py-10">
+            <div className=" flex flex-col items-center justify-center py-10">
                 <Card className="w-full max-w-md">
                     <CardHeader className="space-y-1">
                         <CardTitle className="text-2xl font-bold text-center">Crear una cuenta</CardTitle>

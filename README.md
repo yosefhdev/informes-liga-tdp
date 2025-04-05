@@ -40,13 +40,13 @@ Esto ejecutará el servidor en <http://localhost:5173/> (o el puerto que Vite as
 Para agregar nuevos componentes de ShadCN, usa el siguiente comando:
 
 ```sh
-bunx --bun shadcn@latest add [component]
+bunx shadcn@latest add [component]
 ```
 
 Ejemplo para agregar un botón:
 
 ```sh
-bunx --bun shadcn@latest add button
+bunx shadcn@latest add button
 ```
 
 Puedes consultar los componentes en: <https://ui.shadcn.com/docs>

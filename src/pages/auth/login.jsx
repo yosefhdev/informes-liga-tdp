@@ -1,6 +1,6 @@
 
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -9,8 +9,10 @@ import { EyeIcon, EyeOffIcon } from "lucide-react"
 import PageTransition from "@/components/AnimatedPage"
 import { useAuth } from "@/components/auth/AuthContext"
 import { toast, Toaster } from "sonner"
+import RolChooser from "@/components/RolChooser"
 
 export default function LoginPage() {
+    const navigate = useNavigate()
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [errors, setErrors] = useState({})
@@ -18,9 +20,8 @@ export default function LoginPage() {
         email: "",
         password: "",
     })
-    const {
-        signIn
-    } = useAuth();
+    const { signIn } = useAuth();
+    const [modalOpen, setModalOpen] = useState(false)
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -56,7 +57,8 @@ export default function LoginPage() {
 
         const { email, password } = formData
         const { data, error } = await signIn({ email, password })
-        
+
+
         if (error) {
             setIsLoading(false);
 
@@ -74,23 +76,39 @@ export default function LoginPage() {
             setErrors({});
 
             // TODO: Se redirige a la página de dashboard dependiendo del rol del usuario
-            /*
-                * Si la persona solo tiene un rol en data.user.user_metadata.roles, 
-                * se redirige a la página de dashboard correspondiente al rol.
-                
-                ? 1. Administrador
-                ? 2. Comisario
-                    ! Si la persona tiene más de un rol, se mostrara un selector se dashboard.
-                    ! Si la persona no tiene ningún rol, se redirige a la página de login.`
-            */
 
-            // navigate("/comisario/dashboard");
+            const roles = data.user.user_metadata.roles;
+
+            if (roles.length > 1) {
+                setModalOpen(true);
+            } else if (roles.length === 0) {
+                toast.error("No tienes ningún rol asignado. Contacta al administrador.");
+            } else {
+                const role = roles[0];
+
+                const roleMessages = {
+                    1: "Bienvenido Administrador",
+                    2: "Bienvenido Comisario",
+                };
+
+                const roleRoutes = {
+                    1: "/administrador/dashboard",
+                    2: "/comisario/dashboard",
+                };
+
+                if (roleMessages[role]) {
+                    toast.success(roleMessages[role]);
+                    navigate(roleRoutes[role]);
+                } else {
+                    toast.error("Rol no reconocido. Contacta al administrador.");
+                }
+            }
         }
     }
 
     return (
         <PageTransition>
-            <div className="container flex flex-col items-center justify-center py-10">
+            <div className=" flex flex-col items-center justify-center py-10">
                 <Card className="w-full max-w-md">
                     <CardHeader className="space-y-1">
                         <CardTitle className="text-2xl font-bold text-center">Iniciar Sesión</CardTitle>
@@ -161,6 +179,7 @@ export default function LoginPage() {
                     </form>
                 </Card>
             </div>
+            <RolChooser open={modalOpen} setOpen={setModalOpen} />
             <Toaster richColors icons={true} />
         </PageTransition>
     )

@@ -24,6 +24,7 @@ export default function RegistroPage() {
         email: "",
         password: "",
         confirmPassword: "",
+        roles: [1, 2],
     })
     const [aceptaTerminos, setAceptaTerminos] = useState(false)
     const [errors, setErrors] = useState({})
@@ -110,7 +111,7 @@ export default function RegistroPage() {
             email: "",
             password: "",
             confirmPassword: "",
-            roles: [1, 2],
+            roles: [],
         })
         setAceptaTerminos(false)
         setErrors({})

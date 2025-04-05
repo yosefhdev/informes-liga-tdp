@@ -56,7 +56,7 @@ export default function LoginPage() {
 
         const { email, password } = formData
         const { data, error } = await signIn({ email, password })
-        console.log("🚀 ~ handleSubmit ~ data:", data.user.user_metadata)
+        
         if (error) {
             setIsLoading(false);
 

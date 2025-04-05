@@ -48,7 +48,8 @@ export const AuthProvider = ({ children }) => {
 
     // REGISTER
     const signUp = async (formData) => {
-        const { nombre, apellido_paterno, apellido_materno, email, password } = formData;
+        
+        const { nombre, apellido_paterno, apellido_materno, email, password, roles } = formData;
 
         // 1. Crear usuario en Supabase Auth
         const { data, error } = await supabase.auth.signUp({
@@ -59,6 +60,7 @@ export const AuthProvider = ({ children }) => {
                     nombre: nombre,
                     apellido_paterno: apellido_paterno,
                     apellido_materno: apellido_materno,
+                    roles: roles,
                 }
             }
         });

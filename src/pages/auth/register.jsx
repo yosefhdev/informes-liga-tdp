@@ -1,7 +1,7 @@
 
 
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,10 +13,8 @@ import { useAuth } from "@/components/auth/AuthContext"
 import { toast, Toaster } from "sonner"
 
 export default function RegistroPage() {
-    const {
-        signUp
-    } = useAuth();
-
+    const { signUp } = useAuth();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [formData, setFormData] = useState({
@@ -112,12 +110,14 @@ export default function RegistroPage() {
             email: "",
             password: "",
             confirmPassword: "",
+            roles: [1, 2],
         })
         setAceptaTerminos(false)
         setErrors({})
         // Simulando una petición
         setTimeout(() => {
             setIsLoading(false)
+            navigate("/login");
         }, 2000)
     }
 

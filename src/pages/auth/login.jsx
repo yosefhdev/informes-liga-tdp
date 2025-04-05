@@ -7,31 +7,85 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 import PageTransition from "@/components/AnimatedPage"
+import { useAuth } from "@/components/auth/AuthContext"
+import { toast, Toaster } from "sonner"
 
 export default function LoginPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
+    const [errors, setErrors] = useState({})
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     })
+    const {
+        signIn
+    } = useAuth();
 
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData((prev) => ({ ...prev, [name]: value }))
     }
 
+    const validateForm = () => {
+        const newErrors = {}
+
+        if (!formData.email.trim()) {
+            newErrors.email = "El correo electrónico es requerido"
+        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+            newErrors.email = "El correo electrónico no es válido"
+        }
+
+        if (!formData.password) {
+            newErrors.password = "La contraseña es requerida"
+        } else if (formData.password.length < 6) {
+            newErrors.password = "La contraseña debe tener al menos 6 caracteres"
+        }
+
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         setIsLoading(true)
 
-        // Aquí iría la lógica de autenticación
-        console.log("Iniciando sesión con:", formData)
+        if (!validateForm()) {
+            return
+        }
 
-        // Simulando una petición
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 1000)
+        const { email, password } = formData
+        const { data, error } = await signIn({ email, password })
+        console.log("🚀 ~ handleSubmit ~ data:", data.user.user_metadata)
+        if (error) {
+            setIsLoading(false);
+
+            if (error.message === "Email not confirmed") {
+                toast.warning("Debes confirmar tu correo electrónico antes de iniciar sesión.");
+            } else {
+                toast.error("Error al iniciar sesión. Verifica tus credenciales.");
+            }
+
+            console.error("Error al iniciar sesión:", error.message);
+        } else {
+            toast.success("Sesión iniciada correctamente");
+            setIsLoading(false);
+            setFormData({ email: "", password: "" });
+            setErrors({});
+
+            // TODO: Se redirige a la página de dashboard dependiendo del rol del usuario
+            /*
+                * Si la persona solo tiene un rol en data.user.user_metadata.roles, 
+                * se redirige a la página de dashboard correspondiente al rol.
+                
+                ? 1. Administrador
+                ? 2. Comisario
+                    ! Si la persona tiene más de un rol, se mostrara un selector se dashboard.
+                    ! Si la persona no tiene ningún rol, se redirige a la página de login.`
+            */
+
+            // navigate("/comisario/dashboard");
+        }
     }
 
     return (
@@ -55,6 +109,7 @@ export default function LoginPage() {
                                     onChange={handleChange}
                                     required
                                 />
+                                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                             </div>
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
@@ -84,6 +139,7 @@ export default function LoginPage() {
                                         <span className="sr-only">{showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}</span>
                                     </Button>
                                 </div>
+                                {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
                             </div>
                         </CardContent>
                         <CardFooter className="flex flex-col space-y-4">
@@ -105,6 +161,7 @@ export default function LoginPage() {
                     </form>
                 </Card>
             </div>
+            <Toaster richColors icons={true} />
         </PageTransition>
     )
 }

@@ -40,8 +40,10 @@ export const AuthProvider = ({ children }) => {
     // Funciones de autenticación comunes
 
     // LOGIN
-    const signIn = async (email, password) => {
-        return await supabase.auth.signInWithPassword({ email, password });
+    const signIn = async ({ email, password }) => {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        // console.log("🚀 ~ signIn ~ data:", data.user.user_metadata)
+        return { data, error };
     };
 
     // REGISTER
@@ -52,33 +54,39 @@ export const AuthProvider = ({ children }) => {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
+            options: {
+                data: {
+                    nombre: nombre,
+                    apellido_paterno: apellido_paterno,
+                    apellido_materno: apellido_materno,
+                }
+            }
         });
 
         if (error) {
             return { error };
         }
 
-        const userId = data.user?.id;
+        // const userId = data.user?.id;
 
-        // 2. Insertar datos adicionales en la tabla "usuarios"
-        if (userId) {
-            const { error: insertError } = await supabase
-                .from("usuarios")
-                .insert([
-                    {
-                        id: userId,
-                        nombre,
-                        apellido_paterno,
-                        apellido_materno,
-                        email,
-                        rol: 1 
-                    },
-                ]);
+        // // 2. Insertar datos adicionales en la tabla "usuarios"
+        // if (userId) {
+        //     const { error: insertError } = await supabase
+        //         .from("usuarios")
+        //         .insert([
+        //             {
+        //                 nombre: nombre,
+        //                 apellido_paterno: apellido_paterno,
+        //                 apellido_materno: apellido_materno,
+        //                 email: email,
+        //                 rol: 1
+        //             },
+        //         ]);
 
-            if (insertError) {
-                return { error: insertError };
-            }
-        }
+        //     if (insertError) {
+        //         return { error: insertError };
+        //     }
+        // }
 
         return { data };
 
@@ -97,7 +105,7 @@ export const AuthProvider = ({ children }) => {
             loading,
             signIn,
             signUp,
-            signOut
+            signOut,
         }}>
             {children}
         </AuthContext.Provider>

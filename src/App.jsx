@@ -6,39 +6,52 @@ import LoginPage from '@/pages/auth/login';
 import RecuperarPasswordPage from '@/pages/auth/recover-pass';
 import RegistroPage from '@/pages/auth/register';
 import Home from '@/pages/Home';
+import DashBoardComisario from '@/pages/comisario/DashBoardComisario';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
+import DashBoardAdmin from './pages/admin/DashBoardAdmin';
 
 function App() {
 
 	return (
 		<div className='min-w-[350px]'>
-			<AuthProvider>
-				<BrowserRouter>
+			<BrowserRouter>
 
-					<Navbar
-						horizontalLogo={<img src="/images/LigaTDPlogo.webp" alt="Company Logo" className="h-8" />}
-						mobileLogo={<img src="/images/LigaTDPlogohorizontal.webp" alt="Company Logo" className="h-8" />}
-						title={"Informes de Comisario"}
-					>
-						<NavLink label="Inicio" route="/" />
-						<NavLink label="Acerca de" route="/bout" />
-						<NavLink label="Ayuda" route="/help" />
-					</Navbar>
+				<Navbar
+					horizontalLogo={<img src="/images/LigaTDPlogo.webp" alt="Company Logo" className="h-8" />}
+					mobileLogo={<img src="/images/LigaTDPlogohorizontal.webp" alt="Company Logo" className="h-8" />}
+					title={"Informes de Comisario"}
+				>
+					<NavLink label="Inicio" route="/" />
+					<NavLink label="Acerca de" route="/bout" />
+					<NavLink label="Ayuda" route="/help" />
+				</Navbar>
 
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/login" element={<LoginPage />} />
-						<Route path="/register" element={<RegistroPage />} />
-						<Route path="/recover-password" element={<RecuperarPasswordPage />} />
+				<Routes>
+					<Route path="/" element={<Home />} />
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/register" element={<RegistroPage />} />
+					<Route path="/recover-password" element={<RecuperarPasswordPage />} />
 
-						{/* 404 */}
-						<Route path="*" element={<div className='text-center text-2xl'>404 Not Found</div>} />
+					{/* Rutas de comisario */}
+					<Route path="/comisario/dashboard" element={
+						<ProtectedRoute>
+							<DashBoardComisario />
+						</ProtectedRoute>
+					} />
 
-					</Routes>
+					{/* Rutas de admin */}
+					<Route path="/admin/dashboard" element={
+						<ProtectedRoute>
+							<DashBoardAdmin />
+						</ProtectedRoute>
+					} />
 
-				</BrowserRouter>
-			</AuthProvider>
+					{/* 404 */}
+					<Route path="*" element={<div className='text-center text-2xl'>404 Not Found</div>} />
+				</Routes>
 
+			</BrowserRouter>
 		</div>
 	)
 }

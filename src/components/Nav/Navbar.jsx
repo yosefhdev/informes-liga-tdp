@@ -17,7 +17,7 @@ import { useAuth } from "@/components/auth/AuthContext"
 
 export default function Navbar({ children, className, horizontalLogo, mobileLogo, title }) {
     const [isOpen, setIsOpen] = useState(false)
-    const { user } = useAuth()
+    const { user, signOut } = useAuth()
 
     return (
         <nav className={cn("bg-background border-b", className)}>
@@ -65,12 +65,12 @@ export default function Navbar({ children, className, horizontalLogo, mobileLogo
                                             className="flex items-center h-8 px-2 py-1 rounded-md hover:bg-accent transition-colors"
                                         >
                                             <span className="mr-2 text-sm font-medium truncate max-w-[80px] lg:max-w-[120px]">
-                                                {user.name}
+                                                {user.user_metadata.nombre}
                                             </span>
                                             <ChevronDown className="h-4 w-4 opacity-50" />
                                             <Avatar className="h-8 w-8 ml-1">
-                                                <AvatarImage src={user.avatarUrl} alt={user.name} />
-                                                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                                                <AvatarImage src={user.user_metadata.avatarUrl ?? ""} alt={user.user_metadata.nombre} />
+                                                <AvatarFallback>{user.user_metadata.nombre.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                         </Button>
                                     </DropdownMenuTrigger>
@@ -81,7 +81,7 @@ export default function Navbar({ children, className, horizontalLogo, mobileLogo
                                             <User className="mr-2 h-4 w-4" />
                                             <span>Perfil</span>
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => { signOut() }}>
                                             <LogOut className="mr-2 h-4 w-4" />
                                             <span>Cerrar sesión</span>
                                         </DropdownMenuItem>
@@ -131,15 +131,15 @@ export default function Navbar({ children, className, horizontalLogo, mobileLogo
                             <div className="flex items-center px-3 sm:px-5">
                                 <div className="flex-shrink-0">
                                     <Avatar className="h-10 w-10">
-                                        <AvatarImage src={user.avatarUrl} alt={user.name} />
-                                        <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                                        <AvatarImage src={user.user_metadata.avatarUrl} alt={user.user_metadata.nombre} />
+                                        <AvatarFallback>{user.user_metadata.nombre.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                 </div>
                                 <div className="ml-3 overflow-hidden">
                                     <div className="text-base font-medium truncate">{user.name}</div>
                                     <div className="text-sm text-muted-foreground truncate">{user.email}</div>
                                 </div>
-                                <Button variant="ghost" size="icon" className="ml-auto" onClick={() => { }}>
+                                <Button variant="ghost" size="icon" className="ml-auto" onClick={() => { signOut() }}>
                                     <LogOut className="h-5 w-5" />
                                 </Button>
                             </div>

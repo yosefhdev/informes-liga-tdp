@@ -117,7 +117,6 @@ export default function RegistroPage() {
         setErrors({})
         // Simulando una petición
         setTimeout(() => {
-            console.log("Al login")
             setIsLoading(false)
             navigate("/login");
         }, 2000)

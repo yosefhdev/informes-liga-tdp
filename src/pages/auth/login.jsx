@@ -92,7 +92,7 @@ export default function LoginPage() {
                 };
 
                 const roleRoutes = {
-                    1: "/administrador/dashboard",
+                    1: "/admin/dashboard",
                     2: "/comisario/dashboard",
                 };
 

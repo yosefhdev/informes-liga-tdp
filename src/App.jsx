@@ -1,5 +1,4 @@
 import '@/App.css';
-import { AuthProvider } from '@/components/auth/AuthContext';
 import { NavLink } from '@/components/Nav/nav-link';
 import Navbar from '@/components/Nav/Navbar';
 import LoginPage from '@/pages/auth/login';
@@ -9,12 +8,14 @@ import Home from '@/pages/Home';
 import DashBoardComisario from '@/pages/comisario/DashBoardComisario';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import DashBoardAdmin from './pages/admin/DashBoardAdmin';
+import DashBoardAdmin from '@/pages/admin/DashBoardAdmin';
+import Error404 from '@/pages/Error404';
+import Footer from '@/components/Footer';
 
 function App() {
 
 	return (
-		<div className='min-w-[350px]'>
+		<div className='min-h-screen flex flex-col min-w-[350px]'>
 			<BrowserRouter>
 
 				<Navbar
@@ -23,34 +24,33 @@ function App() {
 					title={"Informes de Comisario"}
 				>
 					<NavLink label="Inicio" route="/" />
-					<NavLink label="Acerca de" route="/bout" />
-					<NavLink label="Ayuda" route="/help" />
+					{/* <NavLink label="Acerca de" route="/bout" />
+					<NavLink label="Ayuda" route="/help" /> */}
 				</Navbar>
 
-				<Routes>
-					<Route path="/" element={<Home />} />
-					<Route path="/login" element={<LoginPage />} />
-					<Route path="/register" element={<RegistroPage />} />
-					<Route path="/recover-password" element={<RecuperarPasswordPage />} />
-
-					{/* Rutas de comisario */}
-					<Route path="/comisario/dashboard" element={
-						<ProtectedRoute>
-							<DashBoardComisario />
-						</ProtectedRoute>
-					} />
-
-					{/* Rutas de admin */}
-					<Route path="/admin/dashboard" element={
-						<ProtectedRoute>
-							<DashBoardAdmin />
-						</ProtectedRoute>
-					} />
-
-					{/* 404 */}
-					<Route path="*" element={<div className='text-center text-2xl'>404 Not Found</div>} />
-				</Routes>
-
+				<div className='flex-grow'>
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route path="/login" element={<LoginPage />} />
+						<Route path="/register" element={<RegistroPage />} />
+						<Route path="/recover-password" element={<RecuperarPasswordPage />} />
+						{/* Rutas de comisario */}
+						<Route path="/comisario/dashboard" element={
+							<ProtectedRoute>
+								<DashBoardComisario />
+							</ProtectedRoute>
+						} />
+						{/* Rutas de admin */}
+						<Route path="/admin/dashboard" element={
+							<ProtectedRoute>
+								<DashBoardAdmin />
+							</ProtectedRoute>
+						} />
+						{/* 404 */}
+						<Route path="*" element={<Error404 />} />
+					</Routes>
+				</div>
+				<Footer />
 			</BrowserRouter>
 		</div>
 	)
